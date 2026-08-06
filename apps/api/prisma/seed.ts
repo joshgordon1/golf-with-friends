@@ -3,11 +3,19 @@
  */
 
 // prisma/seed.ts
+import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '../generated/prisma/client.ts'
 import fs from 'node:fs'
 import path from 'node:path'
 
-const prisma = new PrismaClient()
+const databaseUrl = process.env.DATABASE_URL
+
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is not set. Add it to apps/api/.env or your shell environment before running prisma db seed.')
+}
+
+const adapter = new PrismaPg({ connectionString: databaseUrl })
+const prisma = new PrismaClient({ adapter })
 const dir = path.join(__dirname, 'seed-data', 'courses')
 
 async function upsertTee(courseId: string, gender: 'male' | 'female', tee: ApiTee) {
