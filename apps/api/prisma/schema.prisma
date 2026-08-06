@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  firstName     String?
+  lastName      String?
+  phoneNumber   String?
+  handicapIndex Decimal? @db.Decimal(4, 2)
+
+  leaguesOwned    League[]     @relation("LeagueOwner")
+  teamMemberships TeamMember[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  scores          Score[]
+}
+
+model Season {
+  id       String  @id @default(uuid())
+  leagueId String
+  league   League  @relation(fields: [leagueId], references: [id])
+  year     Int
+  teams    Team[]
+  rounds   Round[]
+}
+
+model Team {
+  id       String       @id @default(uuid())
+  seasonId String
+  season   Season       @relation(fields: [seasonId], references: [id])
+  name     String
+  members  TeamMember[]
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  role   String @default("player") // player | captain
+
+  @@unique([teamId, userId])
+}
+
+model League {
+  id        String   @id @default(uuid())
+  name      String
+  ownerId   String
+  owner     User     @relation("LeagueOwner", fields: [ownerId], references: [id])
+  seasons   Season[]
+  createdAt DateTime @default(now())
+}
+
+model Course {
+  id         String  @id @default(uuid())
+  externalId String  @unique // golfcourseapi.com course id
+  clubName   String
+  courseName String
+  address    String?
+  city       String?
+  state      String?
+  country    String?
+  tees       Tee[]
+}
+
+model Tee {
+  id           String    @id @default(uuid())
+  courseId     String
+  course       Course    @relation(fields: [courseId], references: [id])
+  teeName      String // "Blue", "White", "Red"
+  gender       String // "male" | "female" — API splits tee sets this way
+  courseRating Decimal   @db.Decimal(4, 1) // e.g. 75.7
+  slopeRating  Int // e.g. 132
+  totalYards   Int
+  totalMeters  Int?
+  parTotal     Int
+  holes        TeeHole[]
+  rounds       Round[]
+
+  @@unique([courseId, teeName, gender])
+}
+
+model TeeHole {
+  id          String  @id @default(uuid())
+  teeId       String
+  tee         Tee     @relation(fields: [teeId], references: [id])
+  number      Int // derived from array index, not in the API payload
+  par         Int
+  yardage     Int
+  strokeIndex Int // API calls this "handicap" — renamed to avoid confusion with player handicap
+  scores      Score[]
+
+  @@unique([teeId, number])
+}
+
+model Round {
+  id       String   @id @default(uuid())
+  seasonId String
+  season   Season   @relation(fields: [seasonId], references: [id])
+  teeId    String
+  tee      Tee      @relation(fields: [teeId], references: [id])
+  date     DateTime
+  scores   Score[]
+}
+
+model Score {
+  id        String  @id @default(uuid())
+  roundId   String
+  round     Round   @relation(fields: [roundId], references: [id])
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  teeHoleId String
+  teeHole   TeeHole @relation(fields: [teeHoleId], references: [id])
+  strokes   Int
+
+  @@unique([roundId, userId, teeHoleId])
+}

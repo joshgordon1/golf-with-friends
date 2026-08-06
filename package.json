@@ -1,0 +1,29 @@
+{
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "name": "golf-with-friends",
+    "version": "1.0.0",
+    "description": "An app for Golf Leagues to monitor scoring, provide league information, and more.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/joshgordon1/golf-with-friends.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/joshgordon1/golf-with-friends/issues"
+    },
+    "homepage": "https://github.com/joshgordon1/golf-with-friends#readme",
+    "devDependencies": {
+        "@types/node": "^26.1.2"
+    }
+}
