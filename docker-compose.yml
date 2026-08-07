@@ -5,6 +5,7 @@ services:
       POSTGRES_USER: golf
       POSTGRES_PASSWORD: golf
       POSTGRES_DB: golf_dev
+    # 5433 is the port on the host machine, 5432 is the port inside the container
     ports:
       - "5433:5432"
     volumes:

@@ -1,17 +1,3 @@
-Initialized Prisma in your project
-
-  prisma/
-    schema.prisma
-  prisma.config.ts
-  .env
-  .gitignore
-  .claude/skills/
-  .windsurf/skills/
-  .agents/skills/
-  skills-lock.json
-
-Next, choose how you want to set up your database:
-
 CONNECT EXISTING DATABASE:
   1. Configure your DATABASE_URL in prisma.config.ts
   2. Run prisma db pull to introspect your database.
