@@ -3,7 +3,7 @@ type ApiHole = {
     yardage: number;
     handicap: number
 }
-type ApiTee = {
+export type ApiTee = {
   tee_name: string
   course_rating: number
   slope_rating: number
@@ -12,7 +12,7 @@ type ApiTee = {
   par_total: number
   holes: ApiHole[]
 }
-type ApiCourse = {
+export type ApiCourse = {
   course: {
     id: string
     club_name: string
