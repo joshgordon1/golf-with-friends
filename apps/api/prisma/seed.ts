@@ -5,6 +5,7 @@
 // prisma/seed.ts
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '../generated/prisma/client.ts'
+import { ApiTee, ApiCourse} from './SeedApiModels/GolfCourseApi.ts'
 import fs from 'node:fs'
 import path from 'node:path'
 
